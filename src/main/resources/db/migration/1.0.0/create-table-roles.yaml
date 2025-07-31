@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-roles
+      author: IgorKonevsky
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValue: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false

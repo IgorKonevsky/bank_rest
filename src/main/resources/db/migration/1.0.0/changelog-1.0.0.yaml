@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/1.0.0/create-table-roles.yaml
+  - include:
+      file: db/migration/1.0.0/create-table-users.yaml

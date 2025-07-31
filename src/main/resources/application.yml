@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: bank_rest
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankdb
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: db/migration/db-changelog-master.yaml
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/bankdb
+    default-schema: public
+    liquibase-schema: public
+    user: postgres
+    password: postgres
