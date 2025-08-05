@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/1.2.0/create-table-cards.yaml
+  - include:
+      file: db/migration/1.2.0/create-table-card-block-requests.yaml
+  - include:
+      file: db/migration/1.2.0/1.2.1/changelog-1.2.1.yaml
+

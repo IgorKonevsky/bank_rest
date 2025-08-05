@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-invalid-tokens.yaml
+      author: IgorKonevsky
+      changes:
+        - createTable:
+            tableName: invalid_tokens
+            columns:
+              - column:
+                  name: token
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_date
+                  type: date
+                  constraints:
+                    nullable: false

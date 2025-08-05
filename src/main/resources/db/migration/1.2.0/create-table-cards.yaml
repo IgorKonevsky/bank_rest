@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-cards
+      author: IgorKonevsky
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValue: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: first_twelve_numbers
+                  type: varchar(12)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_four_numbers
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: card_status
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: decimal(16,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_card_owner_id
+                    referencedTableName: users
+                    referencedColumnNames: id

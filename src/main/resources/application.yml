@@ -14,3 +14,17 @@ spring:
     liquibase-schema: public
     user: postgres
     password: postgres
+
+jwt_secret: string123
+jwt_expiration_period: 900000
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+      hibernate:
+        sql: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

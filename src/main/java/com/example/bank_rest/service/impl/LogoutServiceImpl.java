@@ -1,0 +1,31 @@
+package com.example.bank_rest.service.impl;
+
+import com.example.bank_rest.entity.InvalidToken;
+import com.example.bank_rest.repository.InvalidTokenRepository;
+import com.example.bank_rest.service.LogoutService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class LogoutServiceImpl implements LogoutService {
+
+    private final InvalidTokenRepository invalidTokenRepository;
+
+    @Override
+    public String invalidateToken(String authHeader) {
+        String token = authHeader.substring(7);
+
+
+        InvalidToken invalidToken = new InvalidToken();
+        invalidToken.setToken(token);
+        invalidToken.setExpiryDate(new Date(System.currentTimeMillis()));
+        invalidTokenRepository.save(invalidToken);
+
+        return "Logout successful";
+    }
+}

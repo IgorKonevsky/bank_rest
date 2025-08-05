@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-table-card-block-requests-rename
+      author: IgorKonevsky
+      changes:
+        - renameTable:
+            oldTableName: card-block-requests
+            newTableName: card_block_requests

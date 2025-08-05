@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-users
+      id: create-table-card-block-requests-1
       author: IgorKonevsky
       changes:
         - createTable:
-            tableName: users
+            tableName: card-block-requests
             columns:
               - column:
                   name: id
@@ -13,27 +13,20 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
-                  name: first_name
-                  type: varchar(30)
+                  name: status
+                  type: varchar(15)
                   constraints:
                     nullable: false
               - column:
-                  name: last_name
-                  type: varchar(30)
+                  name: requested_at
+                  type: datetime
                   constraints:
                     nullable: false
               - column:
-                  name: patronymic
-                  type: varchar(30)
+                  name: card_id
+                  type: uuid
                   constraints:
                     nullable: false
-              - column:
-                  name: username
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: password
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
+                    foreignKeyName: fk_block_request_card_id
+                    referencedTableName: cards
+                    referencedColumnNames: id
