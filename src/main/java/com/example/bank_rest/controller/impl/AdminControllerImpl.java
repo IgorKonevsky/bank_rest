@@ -11,10 +11,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация интерфейса {@link AdminController}.
+ * Этот класс обрабатывает входящие HTTP-запросы для административных операций.
+ */
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -22,38 +25,59 @@ public class AdminControllerImpl implements AdminController {
 
     private final AdminService adminService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAdminList() {
         log.info("Class: AdminControllerImpl, method: getAdminList()");
         return adminService.getAdminList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<CardAdminResponseDto> getAllCards() {
         return adminService.getAllCards();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CardAdminResponseDto getCardById(UUID id) {
         return adminService.getCard(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CardAdminResponseDto createCard(CreateCardRequestDto createCardRequestDto) {
         return adminService.createCard(createCardRequestDto);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CardAdminResponseDto updateCard(UpdateCardDto updateCardDto) {
         return adminService.updateCard(updateCardDto);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<?> deleteCard(UUID id) {
         adminService.deleteCard(id);
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AdminCardBlockRequestDto> pendingBlockRequests() {
         return adminService.getPendingBlockRequests();

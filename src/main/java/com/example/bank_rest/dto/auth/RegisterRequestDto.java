@@ -2,7 +2,10 @@ package com.example.bank_rest.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "DTO регистрации пользователя")
+/**
+ * DTO для запроса на регистрацию нового пользователя.
+ */
+@Schema(description = "DTO для запроса регистрации")
 public record RegisterRequestDto(
         @Schema(description = "Имя пользователя", example = "Иван")
         String firstName,
@@ -18,4 +21,5 @@ public record RegisterRequestDto(
 
         @Schema(description = "Пароль пользователя", example = "strongPassword123")
         String password
-) {}
+) {
+}

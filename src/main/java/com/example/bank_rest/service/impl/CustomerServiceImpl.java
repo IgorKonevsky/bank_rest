@@ -23,6 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для операций клиента.
+ * Этот класс предоставляет бизнес-логику для получения карт, выполнения переводов и запросов на блокировку.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,12 +37,18 @@ public class CustomerServiceImpl implements CustomerService {
     private final CardBlockRequestRepository cardBlockRequestRepository;
     private final CardMapper cardMapper;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<CardResponseDto> getCardsByCustomer(UUID id, String cardNumber, Pageable pageable) {
         Page<Card> cards = cardRepository.findAllByOwnerIdAndLastFourNumbersContaining(id, cardNumber, pageable);
         return cards.map(cardMapper::toCardResponseDto);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(
             isolation = Isolation.SERIALIZABLE
     )
@@ -75,6 +85,9 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public OpenedBlockRequestDto requestBlock(UUID ownerId, BlockRequestDto blockRequestDto) {

@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Реализация сервиса для аутентификации.
+ * Этот класс предоставляет бизнес-логику для аутентификации пользователей и генерации JWT-токенов.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +29,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Object> handleAuth(AuthRequestDto authRequestDto) {
         try {

@@ -10,6 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+
+/**
+ * Реализация сервиса для выхода из системы.
+ * Этот класс предоставляет бизнес-логику для аннулирования JWT-токенов.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -17,6 +22,10 @@ public class LogoutServiceImpl implements LogoutService {
 
     private final InvalidTokenRepository invalidTokenRepository;
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public String invalidateToken(String authHeader) {

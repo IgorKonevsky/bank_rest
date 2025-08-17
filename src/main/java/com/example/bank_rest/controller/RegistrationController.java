@@ -11,10 +11,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Интерфейс контроллера для регистрации новых пользователей.
+ * Предоставляет конечную точку для создания новых учетных записей.
+ */
 @Tag(name = "Registration", description = "Регистрация новых пользователей")
 @RequestMapping("/api/v1/signup")
 public interface RegistrationController {
 
+    /**
+     * Регистрирует нового пользователя на основе предоставленных данных.
+     * <p>
+     *
+     * @param registerRequestDto DTO, содержащий данные для регистрации пользователя (например, имя пользователя, пароль).
+     * @return {@link ResponseEntity} с DTO, содержащим данные зарегистрированного пользователя.
+     */
     @Operation(summary = "Регистрация пользователя", description = "Регистрация нового пользователя")
     @PostMapping
     public ResponseEntity<RegisterResponseDto> registerUser(

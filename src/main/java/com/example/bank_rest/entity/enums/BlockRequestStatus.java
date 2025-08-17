@@ -1,5 +1,19 @@
 package com.example.bank_rest.entity.enums;
 
+/**
+ * Перечисление, определяющее возможные статусы запроса на блокировку карты.
+ */
 public enum BlockRequestStatus {
-    REQUESTED, ACCEPTED, REJECTED;
+    /**
+     * Запрос на блокировку карты отправлен и находится в ожидании.
+     */
+    REQUESTED,
+    /**
+     * Запрос на блокировку карты принят.
+     */
+    ACCEPTED,
+    /**
+     * Запрос на блокировку карты отклонен.
+     */
+    REJECTED;
 }

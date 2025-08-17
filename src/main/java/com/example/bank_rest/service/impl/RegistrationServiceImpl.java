@@ -18,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Реализация сервиса для регистрации новых пользователей.
+ * Этот класс предоставляет бизнес-логику для создания учетных записей.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -28,6 +32,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final RegistrationMapper registrationMapper;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public RegisterResponseDto registerUser(RegisterRequestDto registerRequestDto) {

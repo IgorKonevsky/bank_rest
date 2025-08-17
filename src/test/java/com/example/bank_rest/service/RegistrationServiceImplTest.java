@@ -15,6 +15,7 @@ import org.mockito.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,7 +67,7 @@ class RegistrationServiceImplTest {
     @Test
     void registerUser_shouldMapUserSetRoleEncodePasswordAndReturnResponseDto() {
         when(registrationMapper.toEntity(registerRequestDto)).thenReturn(user);
-        when(roleRepository.findRoleByName("ROLE_CUSTOMER")).thenReturn(role);
+        when(roleRepository.findRoleByName("ROLE_CUSTOMER")).thenReturn(Optional.ofNullable(role));
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(registrationMapper.toRegisterResponseDto(user)).thenReturn(registerResponseDto);

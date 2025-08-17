@@ -27,6 +27,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация сервиса для административных операций.
+ * Этот класс предоставляет бизнес-логику для управления картами и пользователями, доступную только администратору.
+ */
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -38,6 +42,9 @@ public class AdminServiceImpl implements AdminService {
     private final CardBlockRequestRepository cardBlockRequestRepository;
     private final CardMapper cardMapper;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAdminList() {
         Role adminRole = roleRepository.findRoleByName("ROLE_ADMIN")
@@ -47,18 +54,26 @@ public class AdminServiceImpl implements AdminService {
         return adminList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CardAdminResponseDto getCard(UUID id) {
         return cardRepository.findById(id).map(cardMapper::toCardAdminResponseDto).orElseThrow(() -> new DataMissingException("Card Not Found"));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<CardAdminResponseDto> getAllCards() {
         List<Card> allCards = cardRepository.findAll();
         return allCards.stream().map(cardMapper::toCardAdminResponseDto).toList();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public CardAdminResponseDto createCard(CreateCardRequestDto createCardRequestDto) {
@@ -78,6 +93,9 @@ public class AdminServiceImpl implements AdminService {
         return cardMapper.toCardAdminResponseDto(newCard);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public CardAdminResponseDto updateCard(UpdateCardDto updateCardDto) {
@@ -87,6 +105,9 @@ public class AdminServiceImpl implements AdminService {
         return cardMapper.toCardAdminResponseDto(card);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public void deleteCard(UUID id) {
@@ -97,6 +118,9 @@ public class AdminServiceImpl implements AdminService {
         log.info("Class: AdminServiceImpl, method: deleteCard, cardId: {}", id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AdminCardBlockRequestDto> getPendingBlockRequests() {
         List<CardBlockRequest> cardBlockRequestList = cardBlockRequestRepository

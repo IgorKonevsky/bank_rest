@@ -8,6 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Реализация интерфейса {@link LogoutController}.
+ * Этот класс обрабатывает входящие HTTP-запросы для выхода пользователей.
+ */
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -15,6 +19,9 @@ public class LogoutControllerImpl implements LogoutController {
 
     private final LogoutService logoutService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<?> logout(String authHeader, HttpServletResponse response) {
         return ResponseEntity.ok(logoutService.invalidateToken(authHeader));

@@ -24,6 +24,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * Класс конфигурации Spring Security.
+ * <p>
+ * Этот класс настраивает механизмы безопасности для REST API, включая
+ * управление доступом к конечным точкам, аутентификацию на основе JWT,
+ * кодирование паролей и CORS.
+ * <p>
+ * Аннотирован {@link Configuration}, чтобы Spring обнаружил его как класс конфигурации.
+ * Аннотирован {@link EnableWebSecurity} для включения поддержки веб-безопасности Spring.
+ * Аннотирован {@link RequiredArgsConstructor} для автоматической инъекции зависимостей.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -32,6 +43,14 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Конфигурирует цепочку фильтров безопасности (SecurityFilterChain).
+     * <p>
+     *
+     * @param http Объект {@link HttpSecurity}, используемый для настройки безопасности.
+     * @return {@link SecurityFilterChain} настроенную цепочку фильтров.
+     * @throws Exception если произошла ошибка при настройке.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -63,11 +82,30 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Создает бин {@link PasswordEncoder} для кодирования паролей.
+     * <p>
+     * В этом приложении используется {@link BCryptPasswordEncoder}, который является
+     * надежным алгоритмом для хеширования паролей.
+     *
+     * @return Экземпляр {@link BCryptPasswordEncoder}.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Создает бин {@link AuthenticationManager} для управления аутентификацией.
+     * <p>
+     * Настраивает {@link AuthenticationManagerBuilder}, чтобы использовать
+     * {@link UserDetailsService} для загрузки пользовательских данных и
+     * {@link PasswordEncoder} для проверки паролей.
+     *
+     * @param http Объект {@link HttpSecurity}.
+     * @return Экземпляр {@link AuthenticationManager}.
+     * @throws Exception если произошла ошибка при настройке.
+     */
     @Bean
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -79,6 +117,14 @@ public class SecurityConfig {
     }
 
 
+    /**
+     * Создает бин {@link CorsConfigurationSource} для настройки CORS.
+     * <p>
+     * Настраивает политики CORS, разрешая доступ с определенных источников
+     * (`http://localhost:8080`), а также разрешая определенные HTTP-методы и заголовки.
+     *
+     * @return Экземпляр {@link CorsConfigurationSource}.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -90,7 +136,6 @@ public class SecurityConfig {
                 HttpMethod.DELETE.name(),
                 HttpMethod.OPTIONS.name()
         ));
-        // Разрешённые заголовки
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
@@ -104,5 +149,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
