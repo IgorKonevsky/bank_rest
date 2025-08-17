@@ -6,6 +6,7 @@ import com.example.bank_rest.service.LogoutService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -16,10 +17,15 @@ public class LogoutServiceImpl implements LogoutService {
 
     private final InvalidTokenRepository invalidTokenRepository;
 
+    @Transactional
     @Override
     public String invalidateToken(String authHeader) {
         String token = authHeader.substring(7);
 
+        if (invalidTokenRepository.existsByToken(token)) {
+            log.info("Token already invalidated: {}", token);
+            return "Token already invalidated";
+        }
 
         InvalidToken invalidToken = new InvalidToken();
         invalidToken.setToken(token);

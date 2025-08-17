@@ -9,7 +9,6 @@ import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.swagger.v3.oas.annotations.parameters.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 
@@ -29,20 +28,30 @@ import java.util.Objects;
 )
 public class OpenApiConfig {
 
-
     @Bean
     public OperationCustomizer customize() {
         return (operation, handlerMethod) -> {
-            String path = handlerMethod.getMethodAnnotation(RequestMapping.class) != null
-                    ? Objects.requireNonNull(handlerMethod.getMethodAnnotation(RequestMapping.class)).value()[0]
-                    : "";
+            RequestMapping mapping = handlerMethod.getMethodAnnotation(RequestMapping.class);
 
-            if (path.startsWith("/api/v1/auth") || path.startsWith("/api/v1/signup")  || path.startsWith("/v3/api-docs")
-                    || path.startsWith("/swagger-ui") || path.startsWith("/swagger-ui.html") || path.startsWith("/webjars")) {
+            String path = "";
+            if (mapping != null && mapping.value().length > 0) {
+                path = mapping.value()[0];
+            }
+
+
+            if (path.startsWith("/api/v1/auth") ||
+                    path.startsWith("/api/v1/signup") ||
+                    path.startsWith("/v3/api-docs") ||
+                    path.startsWith("/swagger-ui") ||
+                    path.startsWith("/swagger-ui.html") ||
+                    path.startsWith("/webjars")) {
                 return operation;
             }
 
-            operation.addSecurityItem(new io.swagger.v3.oas.models.security.SecurityRequirement().addList("bearerAuth"));
+
+            operation.addSecurityItem(
+                    new io.swagger.v3.oas.models.security.SecurityRequirement().addList("bearerAuth")
+            );
             return operation;
         };
     }

@@ -11,5 +11,6 @@ import java.util.UUID;
 @Repository
 public interface CardBlockRequestRepository extends JpaRepository<CardBlockRequest, UUID> {
     List<CardBlockRequest> findAllByStatus(BlockRequestStatus status);
+    boolean existsByCard_IdAndStatus(UUID card_Id, BlockRequestStatus status);
 }
 

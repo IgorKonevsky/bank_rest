@@ -1,0 +1,8 @@
+.gradle
+build
+.git
+.idea
+**/node_modules
+.mvn
+.settings
+target

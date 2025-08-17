@@ -6,6 +6,7 @@ import com.example.bank_rest.dto.card.CreateCardRequestDto;
 import com.example.bank_rest.dto.card.UpdateCardDto;
 import com.example.bank_rest.entity.Card;
 import com.example.bank_rest.entity.CardBlockRequest;
+import com.example.bank_rest.entity.Role;
 import com.example.bank_rest.entity.User;
 import com.example.bank_rest.entity.enums.BlockRequestStatus;
 import com.example.bank_rest.entity.enums.CardStatus;
@@ -20,6 +21,7 @@ import com.example.bank_rest.util.mapper.CardMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,7 +40,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<User> getAdminList() {
-        List<User> adminList = userRepository.findAllByRolesContains(roleRepository.findRoleByName("ROLE_ADMIN"));
+        Role adminRole = roleRepository.findRoleByName("ROLE_ADMIN")
+                .orElseThrow(() -> new DataMissingException("Role ROLE_ADMIN not found"));
+        List<User> adminList = userRepository.findAllByRolesContains(adminRole);
         log.info("Class: AdminServiceImpl, method: getAdminList, adminList: {}", adminList.toString());
         return adminList;
     }
@@ -55,6 +59,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
+    @Transactional
     @Override
     public CardAdminResponseDto createCard(CreateCardRequestDto createCardRequestDto) {
         String fullCardNumber = CardNumberGenerator.generateCardNumber("400000");
@@ -73,6 +78,7 @@ public class AdminServiceImpl implements AdminService {
         return cardMapper.toCardAdminResponseDto(newCard);
     }
 
+    @Transactional
     @Override
     public CardAdminResponseDto updateCard(UpdateCardDto updateCardDto) {
         Card card = cardRepository.findById(updateCardDto.id()).orElseThrow(() -> new DataMissingException("Card is not found"));
@@ -81,13 +87,14 @@ public class AdminServiceImpl implements AdminService {
         return cardMapper.toCardAdminResponseDto(card);
     }
 
+    @Transactional
     @Override
     public void deleteCard(UUID id) {
-        cardRepository.findById(id)
-                .ifPresent(card -> {
-                    card.setCardStatus(CardStatus.DELETED);
-                    cardRepository.save(card);
-                });
+        Card card = cardRepository.findById(id)
+                .orElseThrow(() -> new DataMissingException("Card not found"));
+        card.setCardStatus(CardStatus.DELETED);
+        cardRepository.save(card);
+        log.info("Class: AdminServiceImpl, method: deleteCard, cardId: {}", id);
     }
 
     @Override

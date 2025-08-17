@@ -38,7 +38,6 @@ dependencies {
     implementation("org.mapstruct:mapstruct-processor:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
-    //implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")

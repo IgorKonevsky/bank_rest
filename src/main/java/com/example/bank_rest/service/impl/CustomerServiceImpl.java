@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -37,6 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
         return cards.map(cardMapper::toCardResponseDto);
     }
 
+    @Transactional(
+            isolation = Isolation.SERIALIZABLE
+    )
     @Override
     public TransferResponseDto transfer(UUID ownerId, TransferRequestDto transferRequestDto) {
         Card sourceCard = cardRepository
@@ -46,8 +51,11 @@ public class CustomerServiceImpl implements CustomerService {
                 .findByOwnerIdAndLastFourNumbers(ownerId, transferRequestDto.destinationCardLastFourNumbers())
                 .orElseThrow(() -> new DataMissingException("No destination card found"));
 
+        if (sourceCard.getCardStatus() != CardStatus.ACTIVE || destinationCard.getCardStatus() != CardStatus.ACTIVE) {
+            throw new IllegalStateException("Source or destination card is not active");
+        }
         if (sourceCard.getId().equals(destinationCard.getId())) {
-            throw new IllegalArgumentException("Source and destination card IDs are the same");
+            throw new IllegalArgumentException("Cannot transfer to the same card");
         }
         if (sourceCard.getBalance().compareTo(transferRequestDto.amount()) < 0) {
             throw new BalanceInsufficientException("Insufficient balance");
@@ -67,13 +75,18 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
+    @Transactional
     @Override
     public OpenedBlockRequestDto requestBlock(UUID ownerId, BlockRequestDto blockRequestDto) {
         log.info("Class: CustomerServiceImpl, method: requestBlock, blockRequestDto: {}", blockRequestDto);
+
         Card card = cardRepository
                 .findByOwnerIdAndLastFourNumbersAndCardStatus(
                         ownerId, blockRequestDto.lastFourNumbers(), CardStatus.ACTIVE)
                 .orElseThrow(() -> new DataMissingException("No card found"));
+        if (cardBlockRequestRepository.existsByCard_IdAndStatus(card.getId(), BlockRequestStatus.REQUESTED)) {
+            throw new IllegalStateException("Block request already exists for this card");
+        }
         CardBlockRequest cardBlockRequest = new CardBlockRequest();
         cardBlockRequest.setCard(card);
         cardBlockRequest.setRequestedAt(LocalDateTime.now());

@@ -36,7 +36,8 @@ public class AuthServiceImpl implements AuthService {
             String token = jwtUtil.generateToken(authRequestDto.username());
             return Collections.singletonMap("jwt-token", token);
         } catch (AuthenticationException authExc) {
-            throw new RuntimeException("Invalid username/password.");
+            log.error("Authentication failed for username: {}", authRequestDto.username(), authExc);
+            throw new AuthenticationException("Invalid username or password") {};
         }
     }
 }

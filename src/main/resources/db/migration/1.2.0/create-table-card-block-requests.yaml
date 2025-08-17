@@ -2,6 +2,13 @@ databaseChangeLog:
   - changeSet:
       id: create-table-card-block-requests-1
       author: IgorKonevsky
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: cards
+        - tableExists:
+            tableName: card-block-requests
+            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: card-block-requests

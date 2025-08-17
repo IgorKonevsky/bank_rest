@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: create-table-roles
       author: IgorKonevsky
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: roles
+            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: roles
