@@ -3,7 +3,7 @@ WORKDIR /home/gradle/project
 
 COPY --chown=gradle:gradle . .
 
-RUN ./gradlew bootJar -x test --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
 FROM eclipse-temurin:21-jre
 
